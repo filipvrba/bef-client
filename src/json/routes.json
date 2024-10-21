@@ -1,0 +1,14 @@
+{
+  "pages": [
+    {
+      "title": "Error",
+      "endpoint": "error",
+      "priority": 0
+    },
+    {
+      "title": "Přihlásit se",
+      "endpoint": "signin",
+      "priority": 10
+    }
+  ]
+}
