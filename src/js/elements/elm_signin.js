@@ -1,3 +1,7 @@
+import CValidation from "../components/elm-signin/validation";
+import CDatabase from "../components/elm-signin/database";
+import CProtect from "../components/elm-signin/protect";
+
 export default class ElmSignin extends HTMLElement {
   constructor() {
     super();
@@ -13,11 +17,12 @@ export default class ElmSignin extends HTMLElement {
     this._inputEmail = this.querySelector("#inputEmail");
     this._inputPassword = this.querySelector("#inputPassword");
     this._btnSubmit = this.querySelector("#btnSubmit");
-
-    return this._btnSubmit.addEventListener(
-      "click",
-      this._hBtnSubmitClick
-    )
+    this._spinnerOverlay = this.querySelector(".spinner-overlay");
+    this._btnSubmit.addEventListener("click", this._hBtnSubmitClick);
+    this._cValidation = new CValidation(this._inputEmail, this._inputPassword);
+    this._cDatabase = new CDatabase(this);
+    this._cProtect = new CProtect();
+    return this._cProtect
   };
 
   disconnectedCallback() {
@@ -28,22 +33,35 @@ export default class ElmSignin extends HTMLElement {
   };
 
   btnSubmitClick() {
-    let email = this._inputEmail.value;
-    let password = this._inputPassword.value;
+    return this._cValidation.validations(() => {
+      let objElements = {
+        email: this._inputEmail,
+        password: this._inputPassword
+      };
 
-    return Net.bef(
-      "select client_token from Authorization;",
-      response => console.log(response)
-    )
+      return this._cDatabase.signin(objElements, (userId) => {
+        let [token, date] = this._cProtect.writeNewToken();
+
+        return this._cDatabase.addToken(
+          {id: userId, token, date},
+          () => location.hash = "dashboard"
+        )
+      })
+    })
   };
 
   initElm() {
     let template = `${`
+<elm-spinner class='spinner-overlay'></elm-spinner>
+
 <div class='mb-3'>
     <label for='inputEmail' class='form-label'>Emailová adresa</label>
     <div class='input-group'>
       <span class='input-group-text'><i class='bi bi-envelope-fill'></i></span>
       <input type='email' class='form-control' id='inputEmail' placeholder='Zadejte email' required>
+      <div id='signinValidationEmailFeedback' class='invalid-feedback'>
+        Zadejte prosím platnou emailovou adresu.
+      </div>
     </div>
 </div>
 <div class='mb-3'>
@@ -51,6 +69,9 @@ export default class ElmSignin extends HTMLElement {
     <div class='input-group'>
       <span class='input-group-text'><i class='bi bi-lock-fill'></i></span>
       <input type='password' class='form-control' id='inputPassword' placeholder='Zadejte heslo' required>
+      <div id='signinValidationPasswordFeedback' class='invalid-feedback'>
+        Zadejte prosím heslo.
+      </div>
     </div>
 </div>
 <div class='mb-3 form-check'>
@@ -60,5 +81,9 @@ export default class ElmSignin extends HTMLElement {
 <button id='btnSubmit' class='btn btn-primary w-100'>Přihlásit se</button>
     `}`;
     return this.innerHTML = template
+  };
+
+  setSpinnerDisplay(isDisabled) {
+    return this._spinnerOverlay.style.display = isDisabled ? "" : "none"
   }
 }

@@ -1,16 +1,9 @@
 export default function handler(req, res) {
-  // is_verbose = req.query.verbose.downcase == 'true'
-  let isVerbose = true;
   let sqlQuery = req.query.query;
-
-  return query(
-    sqlQuery,
-    isVerbose,
-    response => res.status(200).json(response)
-  )
+  return query(sqlQuery, response => res.status(200).json(response))
 };
 
-function query(query, isVerbose, callback) {
+function query(query, callback) {
   let isSet = set(query, (data) => {
     if (callback) return callback(data)
   });
@@ -32,34 +25,28 @@ function get(query, callback) {
   })
 };
 
-function set(query, isVerbose, callback) {
+function set(query, callback) {
   let isActive = false;
   let lowQuery = query.toLowerCase();
 
   if (lowQuery.indexOf("insert into") > -1 || lowQuery.indexOf("create table") > -1) {
     isActive = true;
-
-    send("post", query, isVerbose, (data) => {
-      if (callback) return callback(data)
-    })
+    send("post", query, (data) => {if (callback) return callback(data)})
   } else if (lowQuery.indexOf("delete") > -1) {
     isActive = true;
 
-    send("delete", query, isVerbose, (data) => {
+    send("delete", query, (data) => {
       if (callback) return callback(data)
     })
   } else if (lowQuery.indexOf("update") > -1) {
     isActive = true;
-
-    send("patch", query, isVerbose, (data) => {
-      if (callback) return callback(data)
-    })
+    send("patch", query, (data) => {if (callback) return callback(data)})
   };
 
   return isActive
 };
 
-function send(method, query, isVerbose=true, callback) {
+function send(method, query, callback) {
   method = method.toUpperCase();
 
   return fetch(process.env.URL_API, {method, headers: {
@@ -67,11 +54,6 @@ function send(method, query, isVerbose=true, callback) {
     Database: process.env.DATABASE,
     Query: query
   }}).then(response => response.json()).then((data) => {
-    if (data.status_code === 403 || data.status_code === 405 || data.status === "SQL Error") {
-      if (isVerbose) console.error(`${method}: ${data.status_code} ${data.status}`);
-      if (callback) return callback(false)
-    } else if (callback) {
-      return callback(true)
-    }
+    if (callback) return callback(data)
   })
 }

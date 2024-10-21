@@ -9,7 +9,13 @@ export default class Net {
     let encodeQuery = encodeURIComponent(query);
 
     return Net.curl(`/api/bef?query=${encodeQuery}`, (response) => {
-      if (callback) return callback(JSON.parse(response))
+      let data = JSON.parse(response);
+
+      if (data.status_code === 403 || data.status_code === 405 || data.status === "SQL Error") {
+        if (callback) return callback(null)
+      } else if (callback) {
+        return callback(data)
+      }
     })
   }
 };
