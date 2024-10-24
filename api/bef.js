@@ -1,19 +1,29 @@
 export default function handler(req, res) {
   let sqlQuery = req.query.query;
-  return query(sqlQuery, response => res.status(200).json(response))
+  let database = req.query.db || process.env.DATABASE;
+
+  let options = {
+    db: database,
+    query: sqlQuery,
+    tokens: getTokens(database)
+  };
+
+  return query(options, response => res.status(200).json(response))
 };
 
-function query(query, callback) {
-  let isSet = set(query, (data) => {
+function query(options, callback) {
+  let isSet = set(options, (data) => {
     if (callback) return callback(data)
   });
 
-  if (!isSet) return get(query, (data) => {if (callback) return callback(data)})
+  if (!isSet) {
+    return get(options, (data) => {if (callback) return callback(data)})
+  }
 };
 
-function get(query, callback) {
-  let queryEncode = encodeURIComponent(query);
-  let uri = `${process.env.URL_API}?token=${process.env.BEF_CLIENT}&database=${process.env.DATABASE}&query=${queryEncode}`;
+function get(options, callback) {
+  let queryEncode = encodeURIComponent(options.query);
+  let uri = `${process.env.URL_API}?token=${options.tokens.client}&database=${options.db}&query=${queryEncode}`;
 
   return fetch(uri).then(response => response.json()).then((data) => {
     if (data.statusCode) {
@@ -25,35 +35,48 @@ function get(query, callback) {
   })
 };
 
-function set(query, callback) {
+function set(options, callback) {
   let isActive = false;
-  let lowQuery = query.toLowerCase();
+  let lowQuery = options.query.toLowerCase();
 
   if (lowQuery.indexOf("insert into") > -1 || lowQuery.indexOf("create table") > -1) {
     isActive = true;
-    send("post", query, (data) => {if (callback) return callback(data)})
+
+    send("post", options, (data) => {
+      if (callback) return callback(data)
+    })
   } else if (lowQuery.indexOf("delete") > -1) {
     isActive = true;
 
-    send("delete", query, (data) => {
+    send("delete", options, (data) => {
       if (callback) return callback(data)
     })
   } else if (lowQuery.indexOf("update") > -1) {
     isActive = true;
-    send("patch", query, (data) => {if (callback) return callback(data)})
+
+    send("patch", options, (data) => {
+      if (callback) return callback(data)
+    })
   };
 
   return isActive
 };
 
-function send(method, query, callback) {
+function send(method, options, callback) {
   method = method.toUpperCase();
 
   return fetch(process.env.URL_API, {method, headers: {
-    Token: process.env.BEF_SERVER,
-    Database: process.env.DATABASE,
-    Query: query
+    Token: options.tokens.server,
+    Database: options.db,
+    Query: options.query
   }}).then(response => response.json()).then((data) => {
     if (callback) return callback(data)
   })
+};
+
+function getTokens(database) {
+  let decodeBefKeys = atob(process.env.BEF_KEYS);
+  let objBefKeys = JSON.parse(decodeBefKeys);
+  let relevantTokens = objBefKeys.databases[parseInt(database) - 1].tokens;
+  return relevantTokens
 }

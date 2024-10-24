@@ -1,26 +1,32 @@
 export default def handler(req, res)
-  sql_query  = req.query.query
+  sql_query = req.query.query
+  database  = req.query.db || process.env.DATABASE
+  options = {
+    db: database,
+    query: sql_query,
+    tokens: get_tokens(database)
+  }
 
-  query(sql_query) do |response|
+  query(options) do |response|
     res.status(200).json(response)
   end
 end
 
-def query(query, &callback)
-  is_set = set(query) do |data|
+def query(options, &callback)
+  is_set = set(options) do |data|
     callback(data) if callback
   end
   unless is_set
-    get(query) do |data|
+    get(options) do |data|
       callback(data) if callback
     end
   end
 end
 
-def get(query, &callback)
-  query_encode = encodeURIComponent(query)
-  uri = "#{process.env.URL_API}?token=#{process.env.BEF_CLIENT}" +
-      "&database=#{process.env.DATABASE}&query=#{query_encode}"
+def get(options, &callback)
+  query_encode = encodeURIComponent(options.query)
+  uri = "#{process.env.URL_API}?token=#{options.tokens.client}" +
+      "&database=#{options.db}&query=#{query_encode}"
 
   fetch(uri)
   .then(lambda do |response|
@@ -36,27 +42,27 @@ def get(query, &callback)
   end)
 end
 
-def set(query, &callback)
+def set(options, &callback)
   is_active = false
-  low_query = query.downcase()
+  low_query = options.query.downcase()
 
   if low_query.indexOf('insert into') > -1 ||
      low_query.indexOf('create table') > -1
     
     is_active = true
-    send('post', query) do |data|
+    send('post', options) do |data|
       callback(data) if callback
     end
   elsif low_query.indexOf('delete') > -1
 
     is_active = true
-    send('delete', query) do |data|
+    send('delete', options) do |data|
       callback(data) if callback
     end
   elsif low_query.indexOf('update') > -1
 
     is_active = true
-    send('patch', query) do |data|
+    send('patch', options) do |data|
       callback(data) if callback
     end
   end
@@ -64,15 +70,15 @@ def set(query, &callback)
   return is_active
 end
 
-def send(method, query, &callback)
+def send(method, options, &callback)
   method = method.upcase()
   
   fetch(process.env.URL_API, {
     method: method,
     headers: {
-      'Token': process.env.BEF_SERVER,
-      'Database': process.env.DATABASE,
-      'Query': query,
+      'Token': options.tokens.server,
+      'Database': options.db,
+      'Query': options.query,
     }
   })
   .then(lambda do |response|
@@ -81,4 +87,12 @@ def send(method, query, &callback)
   .then(lambda do |data|
     callback(data) if callback
   end)
+end
+
+def get_tokens(database)
+  decode_bef_keys = atob(process.env.BEF_KEYS)
+  obj_bef_keys    = JSON.parse(decode_bef_keys)
+
+  relevant_tokens = obj_bef_keys.databases[database.to_i - 1].tokens
+  return relevant_tokens
 end

@@ -1,0 +1,103 @@
+<div class="container-fluid">
+  <div class="row">
+    <elm-dashboard-sidebar class="col-md-3 col-lg-2"></elm-dashboard-sidebar>
+
+    <!-- Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Projekt: Název projektu</h1>
+      </div>
+
+      <!-- Dynamic Table Schema -->
+      <div id="table-schema">
+        <h4>Schéma tabulky: Tabulka 1</h4>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>Název Sloupce</th>
+                <th>Typ Dat</th>
+                <th>Akce</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>id</td>
+                <td>integer</td>
+                <td>
+                  <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Upravit</button>
+                  <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Smazat</button>
+                </td>
+              </tr>
+              <tr>
+                <td>název</td>
+                <td>varchar(255)</td>
+                <td>
+                  <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Upravit</button>
+                  <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Smazat</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="btn btn-success mt-3"><i class="bi bi-plus"></i> Přidat nový sloupec</button>
+      </div>
+
+      <!-- Dynamic Table Content -->
+      <div id="table-content" class="mt-5">
+        <h4>Obsah tabulky: Tabulka 1</h4>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>id</th>
+                <th>název</th>
+                <th>Akce</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Záznam 1</td>
+                <td>
+                  <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Upravit</button>
+                  <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Smazat</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Záznam 2</td>
+                <td>
+                  <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Upravit</button>
+                  <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Smazat</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button class="btn btn-success mt-3"><i class="bi bi-plus"></i> Přidat nový záznam</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Modal for Adding New Table -->
+<div class="modal fade" id="addTableModal" tabindex="-1" aria-labelledby="addTableModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTableModalLabel">Přidat novou tabulku</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addTableForm">
+          <div class="mb-3">
+            <label for="tableName" class="form-label">Název tabulky</label>
+            <input type="text" class="form-control" id="tableName" placeholder="Název nové tabulky">
+          </div>
+          <button type="submit" class="btn btn-primary">Přidat tabulku</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+#projectList, #tableList {
+  max-height: 300px; /* Maximální výška panelu, aby se dlouhé seznamy rolovaly */
+  overflow-y: auto;
+}
+
+/* Zvýraznění aktivních položek */
+.active-item {
+  background-color: #007bff;
+  color: white;
+}
+
+.active-item:hover {
+  background-color: #0056b3;
+}
+
+/* Lépe oddělené sekce v sidebaru */
+h6 {
+  font-size: 1rem;
+  padding-left: 15px;
+  margin-top: 1rem;
+}

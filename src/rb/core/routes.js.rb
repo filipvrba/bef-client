@@ -4,10 +4,12 @@ window.ROUTES_JSON = routes_obj
 
 import 'errorHTML', '../../html/error.html?raw'
 import 'signinHTML', '../../html/signin.html?raw'
+import 'dashboardHTML', '../../html/dashboard.html?raw'
 
 window.PAGES = {
   error: errorHTML,
   signin: signinHTML,
+  dashboard: dashboardHTML,
 }
 
 class Routes
