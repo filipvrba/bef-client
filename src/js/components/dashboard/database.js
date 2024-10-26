@@ -15,5 +15,9 @@ export default class CDatabase {
         }
       }
     })
+  };
+
+  getProjects(callback) {
+    return null
   }
 }

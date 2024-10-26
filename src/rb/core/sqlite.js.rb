@@ -11,12 +11,12 @@ export default class SQLite
     table = {
       name: name,
       columns: [],
-      foreing_keys: []
+      foreign_keys: []
     }
 
     shemas.each do |shema|
       if shema.index('FOREIGN KEY') > -1
-        table.foreing_keys.push(shema)
+        table.foreign_keys.push(shema)
       else
         shema_split = shema.split(' ')
         name_column = shema_split.slice(0, 1).join('')

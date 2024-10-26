@@ -14,7 +14,7 @@ export default class CDatabase
     query = "SELECT id FROM users WHERE email='#{email}' " +
             "AND hash_password='#{hash_password}';"
 
-    Net.bef(query) do |rows|
+    Net.bef [query] do |rows|
       @element.set_spinner_display(false)
       is_signin = rows.length > 0 if rows
 
@@ -31,7 +31,7 @@ export default class CDatabase
     query = "INSERT INTO tokens (user_id, token, expires_at) " +
             "VALUES (#{options.id}, '#{options.token}', '#{options.date}');"
       
-    Net.bef(query) do |is_write|
+    Net.bef [query] do |is_write|
       @element.set_spinner_display(false)
       
       if is_write

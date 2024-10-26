@@ -10,3 +10,18 @@ window.custom_elements.define('elm-dashboard-sidebar', ElmDashboardSidebar)
 
 import 'ElmDashboardSidebarProjects', './elements/dashboard/sidebar/elm_projects'
 window.custom_elements.define('elm-dashboard-sidebar-projects', ElmDashboardSidebarProjects)
+
+import 'ElmDashboardMainContent', './elements/dashboard/elm_main_content'
+window.custom_elements.define('elm-dashboard-main-content', ElmDashboardMainContent)
+
+import 'ElmDashboardMainContentTable', './elements/dashboard/main-content/elm_table'
+window.custom_elements.define('elm-dashboard-main-content-table', ElmDashboardMainContentTable)
+
+import 'ElmDashboardSidebarModalTable', './elements/dashboard/sidebar/elm_modal_table'
+window.custom_elements.define('elm-dashboard-sidebar-modal-table', ElmDashboardSidebarModalTable)
+
+import 'ElmDashboard', './elements/elm_dashboard'
+window.custom_elements.define('elm-dashboard', ElmDashboard)
+
+import 'ElmDashboardSidebarTables', './elements/dashboard/sidebar/elm_tables'
+window.custom_elements.define('elm-dashboard-sidebar-tables', ElmDashboardSidebarTables)

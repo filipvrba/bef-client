@@ -5,7 +5,9 @@ import 'CProtect', '../components/elm-signin/protect'
 export default class ElmSignin < HTMLElement
   def initialize
     super
-    @h_btn_submit_click = lambda { btn_submit_click() }
+    @h_btn_submit_click        = lambda { btn_submit_click() }
+    @h_input_email_keypress    = lambda { input_email_keypress() }
+    @h_input_password_keypress = lambda { input_password_keypress() }
 
     init_elm()
   end
@@ -17,6 +19,9 @@ export default class ElmSignin < HTMLElement
     @spinner_overlay = self.query_selector('.spinner-overlay')
 
     @btn_submit.add_event_listener('click', @h_btn_submit_click)
+
+    @input_email.add_event_listener('keypress', @h_input_email_keypress)
+    @input_password.add_event_listener('keypress', @h_input_password_keypress)
 
     @c_validation = CValidation.new(@input_email, @input_password)
     @c_database   = CDatabase.new(self)
@@ -40,6 +45,22 @@ export default class ElmSignin < HTMLElement
         end
       end
     end
+  end
+
+  def input_email_keypress()
+    unless event.key == 'Enter'
+      return
+    end
+
+    @input_password.focus()
+  end
+
+  def input_password_keypress()
+    unless event.key == 'Enter'
+      return
+    end
+
+    @btn_submit.click()
   end
 
   def init_elm()

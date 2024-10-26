@@ -10,6 +10,14 @@ export default class ElmSignin extends HTMLElement {
       return this.btnSubmitClick()
     };
 
+    this._hInputEmailKeypress = () => {
+      return this.inputEmailKeypress()
+    };
+
+    this._hInputPasswordKeypress = () => {
+      return this.inputPasswordKeypress()
+    };
+
     this.initElm()
   };
 
@@ -19,6 +27,17 @@ export default class ElmSignin extends HTMLElement {
     this._btnSubmit = this.querySelector("#btnSubmit");
     this._spinnerOverlay = this.querySelector(".spinner-overlay");
     this._btnSubmit.addEventListener("click", this._hBtnSubmitClick);
+
+    this._inputEmail.addEventListener(
+      "keypress",
+      this._hInputEmailKeypress
+    );
+
+    this._inputPassword.addEventListener(
+      "keypress",
+      this._hInputPasswordKeypress
+    );
+
     this._cValidation = new CValidation(this._inputEmail, this._inputPassword);
     this._cDatabase = new CDatabase(this);
     this._cProtect = new CProtect();
@@ -48,6 +67,16 @@ export default class ElmSignin extends HTMLElement {
         )
       })
     })
+  };
+
+  inputEmailKeypress() {
+    if (event.key !== "Enter") return;
+    return this._inputPassword.focus()
+  };
+
+  inputPasswordKeypress() {
+    if (event.key !== "Enter") return;
+    return this._btnSubmit.click()
   };
 
   initElm() {

@@ -15,4 +15,34 @@ import ElmDashboardSidebarProjects from "./elements/dashboard/sidebar/elm_projec
 window.customElements.define(
   "elm-dashboard-sidebar-projects",
   ElmDashboardSidebarProjects
+);
+
+import ElmDashboardMainContent from "./elements/dashboard/elm_main_content";
+
+window.customElements.define(
+  "elm-dashboard-main-content",
+  ElmDashboardMainContent
+);
+
+import ElmDashboardMainContentTable from "./elements/dashboard/main-content/elm_table";
+
+window.customElements.define(
+  "elm-dashboard-main-content-table",
+  ElmDashboardMainContentTable
+);
+
+import ElmDashboardSidebarModalTable from "./elements/dashboard/sidebar/elm_modal_table";
+
+window.customElements.define(
+  "elm-dashboard-sidebar-modal-table",
+  ElmDashboardSidebarModalTable
+);
+
+import ElmDashboard from "./elements/elm_dashboard";
+window.customElements.define("elm-dashboard", ElmDashboard);
+import ElmDashboardSidebarTables from "./elements/dashboard/sidebar/elm_tables";
+
+window.customElements.define(
+  "elm-dashboard-sidebar-tables",
+  ElmDashboardSidebarTables
 )

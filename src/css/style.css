@@ -1,5 +1,5 @@
 #projectList, #tableList {
-  max-height: 300px; /* Maximální výška panelu, aby se dlouhé seznamy rolovaly */
+  height: 35%;
   overflow-y: auto;
 }
 

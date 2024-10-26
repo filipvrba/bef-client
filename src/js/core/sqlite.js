@@ -8,11 +8,11 @@ export default class SQLite {
     if (content.length <= 0) return null;
     let [name, sShema] = content[0];
     let shemas = sShema.split(",").map(item => item.trim());
-    let table = {name, columns: [], foreingKeys: []};
+    let table = {name, columns: [], foreignKeys: []};
 
     for (let shema of shemas) {
       if (shema.indexOf("FOREIGN KEY") > -1) {
-        table.foreingKeys.push(shema)
+        table.foreignKeys.push(shema)
       } else {
         let shemaSplit = shema.split(" ");
         let nameColumn = shemaSplit.slice(0, 1).join("");
