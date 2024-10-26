@@ -28,3 +28,6 @@ window.custom_elements.define('elm-dashboard-sidebar-tables', ElmDashboardSideba
 
 import 'ElmDashboardMainContentTableSchema', './elements/dashboard/main-content/table/elm_schema'
 window.custom_elements.define('elm-dashboard-main-content-table-schema', ElmDashboardMainContentTableSchema)
+
+import 'ElmDashboardMainContentTableContents', './elements/dashboard/main-content/table/elm_contents'
+window.custom_elements.define('elm-dashboard-main-content-table-contents', ElmDashboardMainContentTableContents)

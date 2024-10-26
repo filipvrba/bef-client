@@ -52,4 +52,11 @@ import ElmDashboardMainContentTableSchema from "./elements/dashboard/main-conten
 window.customElements.define(
   "elm-dashboard-main-content-table-schema",
   ElmDashboardMainContentTableSchema
+);
+
+import ElmDashboardMainContentTableContents from "./elements/dashboard/main-content/table/elm_contents";
+
+window.customElements.define(
+  "elm-dashboard-main-content-table-contents",
+  ElmDashboardMainContentTableContents
 )
