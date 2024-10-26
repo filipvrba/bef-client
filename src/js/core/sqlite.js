@@ -7,16 +7,16 @@ export default class SQLite {
 
     if (content.length <= 0) return null;
     let [name, sShema] = content[0];
-    let shemas = sShema.split(",").map(item => item.trim());
-    let table = {name, columns: [], foreignKeys: []};
+    let shemas = sShema.split(/,(?![^(]*\))/).map(item => item.trim());
+    let table = {name, columns: [], others: []};
 
-    for (let shema of shemas) {
-      if (shema.indexOf("FOREIGN KEY") > -1) {
-        table.foreignKeys.push(shema)
+    for (let schema of shemas) {
+      if (schema.indexOf("FOREIGN KEY") > -1 || schema.match(/^UNIQUE/m)) {
+        table.others.push(schema)
       } else {
-        let shemaSplit = shema.split(" ");
-        let nameColumn = shemaSplit.slice(0, 1).join("");
-        let dataType = shemaSplit.slice(1).join(" ");
+        let schemaSplit = schema.split(" ");
+        let nameColumn = schemaSplit.slice(0, 1).join("");
+        let dataType = schemaSplit.slice(1).join(" ");
         table.columns.push({name: nameColumn, dataType})
       }
     };

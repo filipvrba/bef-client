@@ -6,21 +6,21 @@ export default class SQLite
     end
 
     name, s_shema = content[0]
-    shemas = s_shema.split(',').map(&:strip)
+    shemas = s_shema.split(/,(?![^(]*\))/).map(&:strip)
 
     table = {
       name: name,
       columns: [],
-      foreign_keys: []
+      others: []
     }
 
-    shemas.each do |shema|
-      if shema.index('FOREIGN KEY') > -1
-        table.foreign_keys.push(shema)
+    shemas.each do |schema|
+      if schema.index('FOREIGN KEY') > -1 || schema.match(/^UNIQUE/)
+        table.others.push(schema)
       else
-        shema_split = shema.split(' ')
-        name_column = shema_split.slice(0, 1).join('')
-        data_type = shema_split.slice(1).join(' ')
+        schema_split = schema.split(' ')
+        name_column = schema_split.slice(0, 1).join('')
+        data_type = schema_split.slice(1).join(' ')
 
         table[:columns].push({
           name: name_column,

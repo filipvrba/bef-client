@@ -25,3 +25,6 @@ window.custom_elements.define('elm-dashboard', ElmDashboard)
 
 import 'ElmDashboardSidebarTables', './elements/dashboard/sidebar/elm_tables'
 window.custom_elements.define('elm-dashboard-sidebar-tables', ElmDashboardSidebarTables)
+
+import 'ElmDashboardMainContentTableSchema', './elements/dashboard/main-content/table/elm_schema'
+window.custom_elements.define('elm-dashboard-main-content-table-schema', ElmDashboardMainContentTableSchema)

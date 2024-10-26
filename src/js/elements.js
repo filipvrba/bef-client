@@ -45,4 +45,11 @@ import ElmDashboardSidebarTables from "./elements/dashboard/sidebar/elm_tables";
 window.customElements.define(
   "elm-dashboard-sidebar-tables",
   ElmDashboardSidebarTables
+);
+
+import ElmDashboardMainContentTableSchema from "./elements/dashboard/main-content/table/elm_schema";
+
+window.customElements.define(
+  "elm-dashboard-main-content-table-schema",
+  ElmDashboardMainContentTableSchema
 )
